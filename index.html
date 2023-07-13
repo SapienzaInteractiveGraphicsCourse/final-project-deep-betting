@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Betting - Emanuele Rucci</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <!-- Run npx parcel index.html to run everything -->
+</head>
+<body>
+    <div class="progress-bar-container">
+        <label for="progress-bar">Loading experience...</label>
+        <progress id="progress-bar" value="0" max="100"> </progress>
+    </div>
+
+
+    <div class="initial-screen ">
+        <i class="fa-solid fa-gear" id="settings-button"></i>
+
+        <img src="./assets/Robot.png" class="robot-img"/>
+        <!-- <img src="./assets/Preview.gif" class="robot-img"/> -->
+        <div class="initial-screen-container">
+            <h1 class="game-title">Deep Betting</h1>
+            <h2 class="credits" style="margin-bottom: 10px;"><b> Emanuele Rucci, 2053183 -- An interactive graphics course project</b></h2>
+            <h2 class="credits">Version 0.1 2023</h2>
+        </div>
+
+        <div class="action-container">
+            <button class="button button-success" id="start-game">Start Game</button>
+            <button class="button" id="release-obstacle" enabled="false">Enable Release Mode</button>
+            <button class="button button-info" id="how-it-works" enabled="false">How it works</button>
+        </div>
+    
+    </div>
+
+    <div class="settings-container d-none">
+        <button class="button button-info" id="settings-exit">Go back</button>
+        <h1>Settings</h1>
+        <div class="box-container">
+            <div class="box box-camera">
+                <i class="fa-solid fa-video"></i>
+                <div class="radio-container">
+                    <input type="radio" id="third-person" name="camera-view" value="third_person" checked>
+                    <label for="third-person">Third Person</label><br>
+                    <input type="radio" id="whole-view" name="camera-view" value="whole_view">
+                    <label for="whole-view">Whole View</label><br>
+                </div>
+            </div>
+    
+            <div class="box box-camera">
+                <i class="fa-brands fa-codepen"></i>
+                <div class="radio-container">
+                    <input type="radio" id="debug-true" name="debug" value="true">
+                    <label for="debug-true">Physics Debug enabled</label><br>
+                    <input type="radio" id="debug-false" name="debug" value="false" checked>
+                    <label for="debug-false">Physics Debug disabled</label><br>
+                </div>
+            </div>
+    
+    
+            <div class="box box-camera">
+                <i class="fa-solid fa-volume-high"></i>
+                <div class="radio-container">
+                    <input type="radio" id="audio-true" name="audio" value="true" checked="checked">
+                    <label for="audio-true">Audio enabled</label><br>
+                    <input type="radio" id="audio-false" name="audio" value="false">
+                    <label for="audio-false">Audio disabled</label><br>
+                </div>
+            </div>
+        </div>
+        
+        
+
+    </div>
+
+    <div class="release-mode-container d-none">
+        <button class="button button-danger" id="release-mode-exit">Exit Release Mode</button>
+    </div>
+
+    <div class="how-it-works-container d-none">
+        <button class="button button-info" id="how-it-works-exit">Go back</button>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <h1 class="how-it-works-title">1. Release the obstacles</h1>
+                    <p class="how-it-works-text">
+                        Press on the button 'Enable release mode' and you will enter in the release mode in which you will be able to release the obstacle on the line of the others robot excluding your line.<br> <b>Remeber that you have a budget to respect!</b><br>Yuo will have to use the mouse to move around the camera and choose where to spawn the obstacles.
+                        <br>Moving the mouse you will see an higlight white plane that will indicate where the obstacle can be spawned.
+                        <br>Then just click and the obstacle will be spawned.
+                    </p>
+                </div>
+                <div class="swiper-slide">
+                    <h1 class="how-it-works-title">2. Start the game</h1>
+                    <p class="how-it-works-text">When you use your full budget you will be able to start the game pressing the 'Start game' button.<br><b>The game will spawn 3 random obstacle on your line.</b></p>
+                </div>
+                <div class="swiper-slide">
+                    <h1 class="how-it-works-title">3. Actions</h1>
+                    <p class="how-it-works-text">You will have to avoid or destroy the objects:     
+                        <br><br>- Use <b>SHIFT</b> to jump over an obstacle
+                        <br>- Use <b>SPACEBAR</b> to punch over an obstacle
+                    </p>
+                    <p>
+                        <b>Note:</b> The physic may have some undesired behaviour, if you want to see the physic debug press the 'Settings' button and enable the 'Physics Debug' option.
+                    </p>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+    
+
+    <div class="game-statistics">
+        <div class="current-cash-container d-none">
+            <i class="dollar-money-icon fa-sharp fa-solid fa-dollar-sign"></i>
+            <div id="cash-value"></div>
+        </div>
+        
+    </div>
+   
+    <div class="countdown-competition">
+        <h1 id="countdown-current-value">3</h1>
+    </div>
+    <div class="message message-spawning d-none">
+        <img class="loading-icon" src="./assets/loading-loading-forever.gif" >
+        <h1 id="message">Spawning random object on your path...</h1>
+    </div>
+
+    <div class="message competition-timer message-spawning" hidden="true">
+        <h1 id="competition-timer-value">Timer : 0s</h1>
+    </div>
+
+    <div class="container-button-settings d-none">
+        <!-- button for sound, for physic debug and for camera -->
+       <i class="fa-solid fa-video" id="change-camera-view"></i>
+       <i class="fa-solid fa-volume-high" id="change-sound"></i>
+    </div>
+
+    <div class="message message-danger d-none" id="budget-finished">
+        <h1>Budget finished. Exit from release mode and start the game!</h1>
+    </div>
+
+    <div class="winner-screen d-none">
+        <div class="trofeo-container">
+            <img class="trofeo" src="./assets/trofeo.gif">
+        </div>
+        <div class="lost-container">
+            <img class="crying-emoji-m" src="./assets/crying-emoji-m.gif">
+        </div>
+        <h1 id="winner-screen-message">YOU WON!</h1>
+        <h2 id="your-time">Your time: <b>0s</b></h2>
+        <h2 id="winner-time">Winner time: <b>0s</b></h2>
+        <button class="button button-info" id="play-again">Play Again</button>
+    </div>
+
+
+    <img src="./assets/shift.png" id="shift-img" class="d-none">
+    <img src="./assets/space.png" id="space-img" class="d-none">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+    <script src="./js/utility.js" type="module"></script>
+    <script src="./js/robot.js" type="module"></script>
+    <script src="./js/obstacle.js" type="module"></script>
+    <script src="./js/scripts_v10.js" type="module"></script>
+    
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
+</body>
+</html>

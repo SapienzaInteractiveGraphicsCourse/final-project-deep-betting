@@ -1,1 +1,15 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/9ItdZzWA)
+
+Emanuele Rucci , 2053183
+
+DEEP BETTING. an Interactive Graphic Course at Sapienza, Rome
+
+How to see the project?
+REQUIREMENTS:
+- nodejs installed (Version 16.15.0)
+- npm installed (Version 8.5.5)
+
+INSTRUCTIONS:
+1. Open a new terminal
+2. Clone this repository -> git clone https://github.com/SapienzaInteractiveGraphicsCourse/final-project-deep-betting.git
+3. Install all the requirements -> npm install (in the root of the repo)
+4. Activate the pacel webpack -> npx parcel index.html
