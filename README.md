@@ -13,3 +13,7 @@ INSTRUCTIONS:
 2. Clone this repository -> git clone https://github.com/SapienzaInteractiveGraphicsCourse/final-project-deep-betting.git
 3. Install all the requirements -> npm install (in the root of the repo)
 4. Activate the pacel webpack -> npx parcel index.html
+5. Open the link given in the terminal
+
+
+In the root of the repository you find the Report.pdf file.
