@@ -26,7 +26,7 @@ const world = new CANNON.World({
 //---------------- COSTANTI ----------------
 let currentPrice = 40;
 const settings = {
-    spawnAmount: 3,
+    spawnAmount: 2,
 }
 //----------------  END COSTANTI ---------------
 
@@ -38,8 +38,6 @@ const paglia = new URL('../assets/Farm_FirstAge_Level3_Wheat.gltf', import.meta.
 import skySceneBG from "../assets/sky_bg.png"
 import landSceneBG from "../assets/land_bg.png"
 import groundTexture from "../assets/groundtexture.png"
-import shiftButton from "../assets/shift.png"
-import spaceButton from "../assets/space.png"
 
 const scene = new THREE.Scene();
 const loadingManager = new THREE.LoadingManager();
@@ -90,9 +88,6 @@ var myRobotSpeed = 0.3
 
 var competitionTimerStart = 0;
 var timerDelta = 0;
-
-// highlight mesh while robot is apporaching to an obstacle
-var highlightMeshTracker = {}
 
 //Sounds variables
 var countDownSoundURL = require('url:../assets/sounds/countdown.mp3');
@@ -213,8 +208,8 @@ var options = {
         num_robots: 5,
         indexCameraFollows: myRobotIndex,
         camera_view: 'third_person',
-        spawnAnimationCameraDuration: 10,
-        buttonsInstructionsFadeDuration: 15,
+        spawnAnimationCameraDuration: 6,
+        buttonsInstructionsFadeDuration: 7,
     },
     settings: {
         sound_enabled: true,
@@ -293,13 +288,50 @@ function managePreCompetition(){
     }
 }
 
+function countDownCompetitionManagement(time){
+    var countDown = document.querySelector('#countdown-current-value')
+    document.querySelector('#start-game').style.display = 'none';
+    if(countDown){
+        if(time>1 && time<2){
+            countDown.innerHTML = "3";
+            if(!countDownSound.isPlaying && !playedSoundsCountdown[0]  && options.settings.sound_enabled == true){
+                countDownSound.play();
+                playedSoundsCountdown[0] = true;
+            }
+        }
+        if(time>= 2 && time<3){
+            countDown.innerHTML = "2";
+            if(!countDownSound.isPlaying && !playedSoundsCountdown[1] && options.settings.sound_enabled == true){
+                countDownSound.play();
+                playedSoundsCountdown[1] = true;
+            }
+        }
+        if(time>3 && time<4){
+            countDown.innerHTML = "1";
+            if(!countDownSound.isPlaying && !playedSoundsCountdown[2] && options.settings.sound_enabled == true){
+                countDownSound.play();
+                playedSoundsCountdown[2] = true;
+            }
+        }
+        if(time>=4){
+            countDown.innerHTML = "GO!";
+            if(!startSound.isPlaying && !playedSoundsCountdown[3] && options.settings.sound_enabled == true){
+                startSound.play();
+                playedSoundsCountdown[3] = true;
+            }
+        }
+    }
+}
+
 function hideCountdown(){
     let countDownElement = document.querySelector('.countdown-competition');
     if(countDownElement){
         countDownElement.classList.add('hide-animation');
+        document.querySelector('.container-button-settings').classList.remove('d-none');
     }
     setTimeout(function(){
         countDownElement.remove();
+        
     }
     ,3000);
 
@@ -340,75 +372,11 @@ function myRobotCompetitionManager(){ //function manager of the behaviour of my 
         camera.position.setY(robotArray[options.gameConstants.indexCameraFollows].mesh.position.y + 20)
         camera.position.setZ(50)
     }
+    sphere.position.x = (robotArray[myRobotIndex].mesh.position.x)
+    sphere.position.y = (robotArray[myRobotIndex].mesh.position.y + 8)
+
     camera.lookAt(robotArray[options.gameConstants.indexCameraFollows].mesh.position.x,robotArray[options.gameConstants.indexCameraFollows].mesh.position.y,robotArray[options.gameConstants.indexCameraFollows].mesh.position.z)
     orbit.target.set(robotArray[options.gameConstants.indexCameraFollows].mesh.position.x,robotArray[options.gameConstants.indexCameraFollows].mesh.position.y,robotArray[options.gameConstants.indexCameraFollows].mesh.position.z);
-}
-
-
-
-
-function setRobotInitialSpeed(){
-    for(let i = 0; i < robotArray.length; i++){
-        if(i == myRobotIndex){
-            robotArray[i].speed = myRobotSpeed
-            robotArray[i].backup_speed = myRobotSpeed
-            robotArray[i].initial_speed = myRobotSpeed
-        }else{
-            //random speed between 0.1 and 0.3
-            robotArray[i].speed  = Math.random() * (0.3 - 0.1) + 0.1;
-            robotArray[i].initial_speed = robotArray[i].speed
-            robotArray[i].backup_speed = robotArray[i].speed
-        }
-    }
-}
-
-var reducingSpeed = false
-function robotCollisonHandler(e){
-    let spawnedObstacle = obstacleArray.filter(obstacle => obstacle.is_spawned == true);
-    let index = spawnedObstacle.findIndex(obstacle => obstacle.physicsBody.id == e.body.id);
-    if(index != -1){
-        if(reducingSpeed == false && robotArray[myRobotIndex].speed  > 0.1){
-            robotArray[myRobotIndex].speed -= 0.03
-            console.log("diminuisco la velocita -->", robotArray[myRobotIndex].speed)
-        }else{
-            reducingSpeed = true
-        }
-    }
-}
-
-function countDownCompetitionManagement(time){
-    var countDown = document.querySelector('#countdown-current-value')
-    document.querySelector('#start-game').style.display = 'none';
-    if(countDown){
-        if(time>1 && time<2){
-            countDown.innerHTML = "3";
-            if(!countDownSound.isPlaying && !playedSoundsCountdown[0]  && options.settings.sound_enabled == true){
-                countDownSound.play();
-                playedSoundsCountdown[0] = true;
-            }
-        }
-        if(time>= 2 && time<3){
-            countDown.innerHTML = "2";
-            if(!countDownSound.isPlaying && !playedSoundsCountdown[1] && options.settings.sound_enabled == true){
-                countDownSound.play();
-                playedSoundsCountdown[1] = true;
-            }
-        }
-        if(time>3 && time<4){
-            countDown.innerHTML = "1";
-            if(!countDownSound.isPlaying && !playedSoundsCountdown[2] && options.settings.sound_enabled == true){
-                countDownSound.play();
-                playedSoundsCountdown[2] = true;
-            }
-        }
-        if(time>=4){
-            countDown.innerHTML = "VIA";
-            if(!startSound.isPlaying && !playedSoundsCountdown[3] && options.settings.sound_enabled == true){
-                startSound.play();
-                playedSoundsCountdown[3] = true;
-            }
-        }
-    }
 }
 
 function checkForWinner(){
@@ -447,7 +415,41 @@ function printWinnerScreen(){
         document.querySelector('#your-time').classList.add('d-none');
     }
 }
-//END COMPETITIOn
+
+
+
+
+function setRobotInitialSpeed(){
+    for(let i = 0; i < robotArray.length; i++){
+        if(i == myRobotIndex){
+            robotArray[i].speed = myRobotSpeed
+            robotArray[i].backup_speed = myRobotSpeed
+            robotArray[i].initial_speed = myRobotSpeed
+        }else{
+            //random speed between 0.1 and 0.3
+            robotArray[i].speed  = Math.random() * (0.3 - 0.1) + 0.1;
+            robotArray[i].initial_speed = robotArray[i].speed
+            robotArray[i].backup_speed = robotArray[i].speed
+        }
+    }
+}
+
+var reducingSpeed = false
+function robotCollisonHandler(e){
+    let spawnedObstacle = obstacleArray.filter(obstacle => obstacle.is_spawned == true);
+    let index = spawnedObstacle.findIndex(obstacle => obstacle.physicsBody.id == e.body.id);
+    if(index != -1){
+        if(reducingSpeed == false && robotArray[myRobotIndex].speed  > 0.1){
+            robotArray[myRobotIndex].speed -= 0.03
+            console.log("diminuisco la velocita -->", robotArray[myRobotIndex].speed)
+        }else{
+            reducingSpeed = true
+        }
+    }
+}
+
+
+
 
 
 function animate() {
@@ -459,7 +461,7 @@ function animate() {
     switch(state){
         case 'spawning':
             document.querySelector('.message-spawning').classList.remove('d-none');
-            spawnOstacoli(tl,settings.spawnAmount);
+            spawnRandomObstacles(tl,settings.spawnAmount);
             if(spawned == true && cameraSpawningFinished == true){
                 document.querySelector('.message-spawning').classList.add('d-none');
                 state='competition';
@@ -532,8 +534,8 @@ function createWorld(assetLoader){
         orbit.target.set(robotArray[options.gameConstants.indexCameraFollows].mesh.position.x,robotArray[options.gameConstants.indexCameraFollows].mesh.position.y,robotArray[options.gameConstants.indexCameraFollows].mesh.position.z);
     }
 
-    createScuderie(assetLoader,5,{width:100,heigth:100})
-    createPaglia(assetLoader,5)
+    createStables(assetLoader,5,{width:100,heigth:100})
+    createGrass(assetLoader,5)
     createWalls(assetLoader,38,6,{width:100,heigth:100})
 
     if(Robot.loaded){
@@ -555,11 +557,28 @@ function createWorld(assetLoader){
     }
 }
 
+const geometry = new THREE.SphereGeometry( 1, 32, 32 );
+const material = new THREE.MeshPhysicalMaterial( {
+    color: 0x00feff,
+    metalness: 0,
+    roughness: 0,
+    clearcoat: 1,
+    clearcoatRoughness: 0,
+    reflectivity: 1,
+    envMapIntensity: 1,
+    premultipliedAlpha: true
+} );
+const sphere = new THREE.Mesh( geometry, material );
 function createRobots(){
     //Create the robots
     for(let i = 0; i < options.gameConstants.num_robots; i++){
         robotArray.push(new Robot(scene,world, -125, 0.1,((-30)+(i*15))));
         if(i == myRobotIndex) robotArray[i].is_my_robot = true;
+
+        if(i == myRobotIndex){
+            sphere.position.set(robotArray[i].mesh.position.x,robotArray[i].mesh.position.y+8,robotArray[i].mesh.position.z)
+            scene.add( sphere )
+        };
     }
 }
 
@@ -606,7 +625,7 @@ function createWalls(assetLoader,num_walls,num_lines,world_size){
     });
 }
 
-function createScuderie(assetLoader,num_lines,world_size){
+function createStables(assetLoader,num_lines,world_size){
     //Caricamento Scuderie
     let scuderiaMesh = null;
     assetLoader.load(scuderia.href, function(gltf){
@@ -634,7 +653,7 @@ function createScuderie(assetLoader,num_lines,world_size){
     })
 }
 
-function createPaglia(assetLoader, num_lines) {
+function createGrass(assetLoader, num_lines) {
     let pagliaMesh = null;
     assetLoader.load(
       paglia.href,
@@ -648,12 +667,12 @@ function createPaglia(assetLoader, num_lines) {
         pagliaMesh.rotation.set(0, Math.PI / 2, 0);
 
         if (pagliaMesh) {
-          // create and add paglia meshes
-          addPagliaMeshes(pagliaMesh, -120, 0.2, -35, 2, 51);
-          addPagliaMeshes(pagliaMesh.clone(), -120, 0.2, -19.7, 2, 51, { x: 2.7 });
-          addPagliaMeshes(pagliaMesh.clone(), -120, 0.2, -4.7, 2, 51, { x: 2.7 });
-          addPagliaMeshes(pagliaMesh.clone(), -120, 0.2, 10.5, 2, 51, { x: 2.7 });
-          addPagliaMeshes(pagliaMesh.clone(), -120, 0.2, 25.5, 2, 51, { x: 2.7 });
+          // create and add grass meshes
+          addGrassMeshes(pagliaMesh, -120, 0.2, -35, 2, 51);
+          addGrassMeshes(pagliaMesh.clone(), -120, 0.2, -19.7, 2, 51, { x: 2.7 });
+          addGrassMeshes(pagliaMesh.clone(), -120, 0.2, -4.7, 2, 51, { x: 2.7 });
+          addGrassMeshes(pagliaMesh.clone(), -120, 0.2, 10.5, 2, 51, { x: 2.7 });
+          addGrassMeshes(pagliaMesh.clone(), -120, 0.2, 25.5, 2, 51, { x: 2.7 });
         }
       },
       undefined,
@@ -663,7 +682,7 @@ function createPaglia(assetLoader, num_lines) {
     );
 }
 
-function addPagliaMeshes(pagliaMesh, startX, startY, startZ, numLayers, numColumns, options = {} ) {
+function addGrassMeshes(pagliaMesh, startX, startY, startZ, numLayers, numColumns, options = {} ) {
     const { x = 3, y = 3, z = 3 } = options;
     pagliaMesh.scale.set(x, y, z);
     pagliaMesh.position.set(startX, startY, startZ);
@@ -690,10 +709,7 @@ var highlightMesh = new THREE.Mesh(
         transparent: false
     })
 );
-highlightMesh.rotateX(-Math.PI / 2);
-highlightMesh.material.color.setHex(0x0000FF);
-scene.add(highlightMesh);
-function mouseMoveAddOstacoli(e){
+function mouseMoveAddObstacles(e){
     const mousePosition = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
 
@@ -704,17 +720,17 @@ function mouseMoveAddOstacoli(e){
     intersects = raycaster.intersectObject(planeMesh);
     if(intersects.length > 0) {
         const intersect = intersects[0];
-        // console.log(intersect)
         const highlightPos = new THREE.Vector3().copy(intersect.point).floor();
 
         highlightMesh.position.set(highlightPos.x, 0.1, highlightPos.z);
+        highlightMesh.rotation.x = Math.PI / 2;
 
         const objectExist = obstacleArray.find(function(object) {
             return (object.mesh.position.x + 3 >= highlightMesh.position.x ) && (object.mesh.position.x - 3 < highlightMesh.position.x)
             && (object.mesh.position.z + 3 >= highlightMesh.position.z) && (object.mesh.position.z - 3 < highlightMesh.position.z)
         });
 
-        const possibleToRelease =  check_possible_release_ostacolo(highlightMesh.position.x,highlightMesh.position.z );
+        const possibleToRelease =  isReleasable(highlightMesh.position.x,highlightMesh.position.z );
 
         if(!objectExist && possibleToRelease)
             highlightMesh.material.color.setHex(0xFFFFFF); //white
@@ -723,81 +739,78 @@ function mouseMoveAddOstacoli(e){
     }
 }
 
-function insertOstacoli(assetLoader){
-    //AGGIUNGI OSTACOLI ALLA PISTA
+function insertObstacles(){
     let releaseMode = document.querySelector('#release-obstacle').getAttribute("enabled");
-    console.log("Release mode: ",releaseMode)
 
     if(releaseMode == "false"){
         scene.remove(highlightMesh)
     }else{
         scene.add(highlightMesh)
-        window.addEventListener('mousemove', mouseMoveAddOstacoli );
-        window.addEventListener('mousedown', function() {
-            var cash_val = document.querySelector("#cash-value");
+        window.addEventListener('mousemove', mouseMoveAddObstacles );
+        window.addEventListener('mousedown', mouseDownRelease );
+    }
+}
+function mouseDownRelease(){
+    var cash_val = document.querySelector("#cash-value");
 
-            const objectExist = obstacleArray.find(function(object) {
-                return (object.mesh.position.x + 3 >= highlightMesh.position.x ) && (object.mesh.position.x - 3 < highlightMesh.position.x)
-                && (object.mesh.position.z + 3 >= highlightMesh.position.z) && (object.mesh.position.z - 3 < highlightMesh.position.z)
-            });
+    const objectExist = obstacleArray.find(function(object) {
+        return (object.mesh.position.x + 3 >= highlightMesh.position.x ) && (object.mesh.position.x - 3 < highlightMesh.position.x)
+        && (object.mesh.position.z + 3 >= highlightMesh.position.z) && (object.mesh.position.z - 3 < highlightMesh.position.z)
+    });
 
 
 
 
-            if(!objectExist) {
-                if(currentPrice >= 10){
-                    if(intersects.length > 0) {
-                        const possibleToRelease =  check_possible_release_ostacolo(highlightMesh.position.x,highlightMesh.position.z );
-                        if(possibleToRelease){
-                            let ostacolo = new Obstacle(scene,world,highlightMesh.position.x,highlightMesh.position.y,highlightMesh.position.z,false);
-                            if(options.settings.sound_enabled==true){
-                                popSound.play();
-                            }
-                            currentPrice -= 10;
-                            cash_val.innerHTML = currentPrice;
-
-                            //aggiungo ostacolo al mondo
-                            obstacleArray.push(ostacolo);
-                            console.log("Ostacoli inseriti-> ",obstacleArray.length)
-                        }
+    if(!objectExist) {
+        if(currentPrice >= 10){
+            if(intersects.length > 0) {
+                const possibleToRelease =  isReleasable(highlightMesh.position.x,highlightMesh.position.z );
+                if(possibleToRelease){
+                    let ostacolo = new Obstacle(scene,world,highlightMesh.position.x,highlightMesh.position.y+10,highlightMesh.position.z,false);
+                    if(options.settings.sound_enabled==true ){
+                        popSound.play();
                     }
-                }else{
-                    let budgetFinished = document.querySelector("#budget-finished");
-                    budgetFinished.classList.remove("d-none");
-                    budgetFinished.style.opacity = 1;
-                    new TWEEN.Tween(budgetFinished.style.opacity)
-                        .to(0, 1000)
-                        .onComplete(function(){
-                            document.querySelector("#budget-finished").classList.add("d-none");
-                        })
-                        .start()
-                }
-
-            }else{
-                //rimuovi ostacolo piazzato
-                let ostacoliList_obj_index = obstacleArray.findIndex((element) => element.mesh.uuid === objectExist.mesh.uuid)
-                if(ostacoliList_obj_index != -1){
-                    world.removeBody(obstacleArray[ostacoliList_obj_index].physicsBody)
-                    scene.remove(obstacleArray[ostacoliList_obj_index].mesh);
-                    if(options.settings.sound_enabled==true){
-                        trashSound.play();
-                    }
-                    console.log("Obstacle array before remove: ",obstacleArray)
-                    obstacleArray = obstacleArray.slice(0,ostacoliList_obj_index).concat(obstacleArray.slice(ostacoliList_obj_index+1));
-                    console.log("Obstacle array after remove: ",obstacleArray)
-
-                    highlightMesh.material.color.setHex(0xFFFFFF);
-                    currentPrice += 10;
-                    document.querySelector("#budget-finished").classList.add("d-none");
+                    currentPrice -= 10;
                     cash_val.innerHTML = currentPrice;
+
+                    //aggiungo ostacolo al mondo
+                    obstacleArray.push(ostacolo);
+                    console.log("Ostacoli inseriti-> ",obstacleArray.length)
                 }
             }
-        });
-    }
-    //END AGGIUNGI OSTACOLI
-}
+        }else{
+            let budgetFinished = document.querySelector("#budget-finished");
+            budgetFinished.classList.remove("d-none");
+            budgetFinished.style.opacity = 1;
+            new TWEEN.Tween(budgetFinished.style.opacity)
+                .to(0, 1000)
+                .onComplete(function(){
+                    document.querySelector("#budget-finished").classList.add("d-none");
+                })
+                .start()
+        }
 
-function check_possible_release_ostacolo(x,z){
+    }else{
+        //rimuovi ostacolo piazzato
+        let ostacoliList_obj_index = obstacleArray.findIndex((element) => element.mesh.uuid === objectExist.mesh.uuid)
+        if(ostacoliList_obj_index != -1){
+            world.removeBody(obstacleArray[ostacoliList_obj_index].physicsBody)
+            scene.remove(obstacleArray[ostacoliList_obj_index].mesh);
+            if(options.settings.sound_enabled==true){
+                trashSound.play();
+            }
+            console.log("Obstacle array before remove: ",obstacleArray)
+            obstacleArray = obstacleArray.slice(0,ostacoliList_obj_index).concat(obstacleArray.slice(ostacoliList_obj_index+1));
+            console.log("Obstacle array after remove: ",obstacleArray)
+
+            highlightMesh.material.color.setHex(0xFFFFFF);
+            currentPrice += 10;
+            document.querySelector("#budget-finished").classList.add("d-none");
+            cash_val.innerHTML = currentPrice;
+        }
+    }
+}
+function isReleasable(x,z){
     if(z != 30 && z != 15 && z != -15 && z != -30 ){
         return false;
     }
@@ -806,47 +819,10 @@ function check_possible_release_ostacolo(x,z){
     }
     return true;
 }
-
-function getLinesRange(){
-    return {
-        line0: {
-            z_start: 23,
-            z_end: -37
-        },
-        line1: {
-            z_start: -9,
-            z_end: -22
-        },
-        line2: {
-            z_start: 7,
-            z_end: -8
-        },
-        line3: {
-            z_start: 22,
-            z_end: 8
-        },
-        line4: {
-            z_start: 37,
-            z_end: 23
-        }
-    }
-}
-
-function getObstaclesInLine(lineNumber) {
-    const linesRange = getLinesRange();
-    const line = `line${lineNumber}`;
-    const zStart = linesRange[line].z_start;
-    const zEnd = linesRange[line].z_end;
-
-    return ostacoliBodyList.filter((obstacle) => {
-      return obstacle.position.z >= zEnd && obstacle.position.z <= zStart;
-    });
-}
 //END CREATIVE MODE
 
-//Spawn ostacoli
-
-function spawnOstacoli(tl, spawnAmount) {
+//Spawn obstacles
+function spawnRandomObstacles(tl, spawnAmount) {
     if(!spawned){
         spawned = true;
         console.log("Spawning ostacoli ....")
@@ -989,7 +965,6 @@ window.onload = function (){
 
 //----------------- EVENT LISTENERS --------------
 document.querySelector('#start-game').addEventListener('click',function(){
-    document.querySelector('.container-button-settings').classList.remove('d-none');
     if(currentPrice > 0){
         alert("You are starting the game but you didn't spend all of your budget! \nThis will make the others robot life easier!")
     }
@@ -1044,7 +1019,7 @@ document.querySelector('#release-obstacle').addEventListener('click',function(){
     }
 
     document.querySelector('.current-cash-container').classList.toggle('d-none')
-    insertOstacoli(assetLoader)
+    insertObstacles(assetLoader)
 })
 
 document.querySelector('#release-mode-exit').addEventListener('click',function(){

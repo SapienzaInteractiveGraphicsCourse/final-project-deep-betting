@@ -7,9 +7,6 @@ import gsap from 'gsap'
 import  * as dat from "dat.gui"
 
 
-
-
-
 class Robot {
     static{
         Robot.loaded = false;
@@ -35,7 +32,6 @@ class Robot {
         this.bones = {};
         this.mesh.traverse(function(node){
             if(node.isMesh) node.castShadow = true;
-            // if(node.isBone) this.bones.push(node);
         }.bind(this))
 
         this.setBones()
@@ -136,7 +132,6 @@ class Robot {
         }
     }
 
-
     runInitialAnimation() {
         // let randomClipInit = ['Robot_Dance','Robot_Idle','Robot_ThumbsUp','Robot_Wave'];
         // let randomClipElement = randomClipInit[Math.floor(Math.random() * randomClipInit.length)];
@@ -145,10 +140,6 @@ class Robot {
         // initialAction.play();
 
         let random_animation = ["yes","wave","dance","hi"]
-        // let random_animation = ["yes"]
-        // let random_animation = ["wave"]
-        // let random_animation = ["dance"]
-        // let random_animation = ["hi"]
         let random_animation_element = random_animation[Math.floor(Math.random() * random_animation.length)];
         Robot.robotAmount += 1;
         switch (random_animation_element) {
@@ -835,12 +826,7 @@ class Robot {
         let shoulderRTimeline = gsap.timeline();
         let headTimeline = gsap.timeline();
 
-        headTimeline.to(this.bones.head.rotation, {
-            x: 0,
-            y: 0,
-            duration: 0.3,
-        });
-
+       
         shoulderLTimeline.to(this.bones.shoulderL.rotation, {
             x: 1.57,
             y: -1,
