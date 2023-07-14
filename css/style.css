@@ -185,7 +185,13 @@ label{
     font-weight: 300;
     color: #2e2e2e;
     margin-top: -10px;
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
+}
+
+.initial-screen .note{
+    font-size: 14px;
+    margin-bottom: 30px;
+    color: #2e2e2e;
 }
 
 .action-container{

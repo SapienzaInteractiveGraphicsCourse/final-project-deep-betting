@@ -5,14 +5,14 @@ DEEP BETTING. an Interactive Graphic Course at Sapienza, Rome
 
 How to see the project?
 REQUIREMENTS:
-- nodejs installed (Version 16.15.0)
-- npm installed (Version 8.5.5)
+- nodejs installed (used Version 16.15.0)
+- npm installed (used Version 8.5.5)
 
 INSTRUCTIONS:
 1. Open a new terminal
 2. Clone this repository -> git clone https://github.com/SapienzaInteractiveGraphicsCourse/final-project-deep-betting.git
 3. Install all the requirements -> npm install (in the root of the repo)
-4. Activate the pacel webpack -> npx parcel index.html
+4. Activate the parcel bundler on the index.html file-> npx parcel index.html
 5. Open the link given in the terminal
 
 

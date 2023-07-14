@@ -18,7 +18,7 @@ class Obstacle {
             Obstacle.root.add(gltf.scene);
             Obstacle.clips = gltf.animations;
 
-            // console.log(dumpObject(Robot.root).join('\n'));
+            // console.log(dumpObject(Obstacle.root).join('\n'));
             Obstacle.loaded = true;
             Obstacle.yBodyDisplacement = 1.4;
         })

@@ -16,10 +16,11 @@ class Robot {
         gltfLoader.load(robotAsset.href, function(gltf){
 
             Robot.root = new THREE.Object3D;
+            Robot.root.name = "RootNode";
             Robot.root.add(gltf.scene);
             Robot.clips = gltf.animations;
 
-            // console.log(dumpObject(Robot.root).join('\n'));
+            console.log(dumpObject(Robot.root).join('\n'));
             Robot.loaded = true;
         })
         Robot.robotAmount = 0;
