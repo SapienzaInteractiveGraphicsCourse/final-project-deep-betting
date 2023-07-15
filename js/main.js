@@ -1112,9 +1112,9 @@ function onDocumentKeyDown(event) {
             if(!PressedKeys.shift && state == 'running') robotArray[myRobotIndex].jumpAnimation();
             PressedKeys.shift = true;
         } else if (keyCode == 32) {
-            //get the obstacle from obstacleArray with the is_spawned flag set to true
-            //and call the punch animation on that obstacle
+            //getting the obstacle from obstacleArray with the is_spawned flag set to true
             let spawnedObstacle = obstacleArray.filter(obstacle => obstacle.is_spawned == true);
+            //and call the punch animation on that obstacle
             if(!PressedKeys.space && state == 'running') robotArray[myRobotIndex].punchAnimation(null,spawnedObstacle,scene,world);
             PressedKeys.space = true;
         }

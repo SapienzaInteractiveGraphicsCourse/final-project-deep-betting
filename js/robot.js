@@ -134,35 +134,18 @@ class Robot {
     }
 
     runInitialAnimation() {
-        // let randomClipInit = ['Robot_Dance','Robot_Idle','Robot_ThumbsUp','Robot_Wave'];
-        // let randomClipElement = randomClipInit[Math.floor(Math.random() * randomClipInit.length)];
-        // const initialClip = THREE.AnimationClip.findByName(Robot.clips,randomClipElement);
-        // const initialAction = this.mixer.clipAction(initialClip);
-        // initialAction.play();
-
-        let random_animation = ["yes","wave","dance","hi"]
+        let random_animation = ["yes","hi","dance"]
         let random_animation_element = random_animation[Math.floor(Math.random() * random_animation.length)];
         Robot.robotAmount += 1;
         switch (random_animation_element) {
             case "yes":
-                console.log("yes animation: ",Robot.robotAmount)
                 this.yesAnimation();
                 break;
-            case "wave":
-                console.log("wave animation: ",Robot.robotAmount)
-                this.waveAnimation();
+            case "hi":
+                this.hiAnimation();
                 break;
             case "dance":
-                console.log("dance animation: ",Robot.robotAmount)
                 this.danceAnimation();
-                break;
-            case "thumbsup":
-                console.log("thumbsup animation: ",Robot.robotAmount)
-                this.thumbsUpAnimation();
-                break;
-            case "hi":
-                console.log("hi animation: ",Robot.robotAmount)
-                this.sayHiAnimation();
                 break;
             default:
                 break;
@@ -203,174 +186,6 @@ class Robot {
             })
             .start();
         }
-    }
-
-    sayHiAnimation(){
-        if(!this.is_running_animation){
-            new TWEEN.Tween(this.bones.neck.rotation)
-                .to({ z: 0.32 }, 150)
-                .easing(TWEEN.Easing.Linear.None)
-                .start();
-
-            new TWEEN.Tween(this.bones.shoulderL.rotation)
-                .to({ x: -1.7675, y: 0.1362, z: -1.7542 }, 150)
-                .easing(TWEEN.Easing.Linear.None)
-                .start();
-
-            new TWEEN.Tween(this.bones.upperArmL.rotation)
-                .to({ x: 0.712, y: -1.3084, z: 0.5608 }, 150)
-                .easing(TWEEN.Easing.Linear.None)
-                .start();
-
-            new TWEEN.Tween(this.bones.lowerArmL.rotation)
-                .to({ x: 1.3847, y: 0.8506, z: -1.4144 }, 150)
-                .easing(TWEEN.Easing.Linear.None)
-                .onComplete(() => {
-
-                    new TWEEN.Tween(this.bones.lowerArmL.rotation)
-                        .to({ z: -1.814 }, 150)
-                        .easing(TWEEN.Easing.Linear.None)
-                        .delay(50)
-                        .onComplete(() => {
-
-                            new TWEEN.Tween(this.bones.lowerArmL.rotation)
-                                .to({ z: -1.4144 }, 150)
-                                .easing(TWEEN.Easing.Linear.None)
-                                .onComplete(() => {
-
-                                    new TWEEN.Tween(this.bones.lowerArmL.rotation)
-                                        .to({ z: -1.814 }, 100)
-                                        .easing(TWEEN.Easing.Linear.None)
-                                        .onComplete(() => {
-                                            //Back to initial position
-                                            new TWEEN.Tween(this.bones.neck.rotation)
-                                                .to({ z: 0.05532293059308308 }, 150)
-                                                .easing(TWEEN.Easing.Linear.None)
-                                                .start();
-
-                                            new TWEEN.Tween(this.bones.shoulderL.rotation)
-                                                .to({ x: -0.10898229518839646, y: -0.000001107503889347332, z: -2.71796254738819 }, 150)
-                                                .easing(TWEEN.Easing.Linear.None)
-                                                .start();
-
-                                            new TWEEN.Tween(this.bones.upperArmL.rotation)
-                                                .to({ x: 0.3844815830256843, y: -1.5253074224154826, z: 0.5598306368119682 }, 150)
-                                                .easing(TWEEN.Easing.Linear.None)
-                                                .start();
-
-                                            new TWEEN.Tween(this.bones.lowerArmL.rotation)
-                                                .to({ x: 1.2070851479241527, y: 0.5176693038981423, z: -1.2969990028508354 }, 150)
-                                                .easing(TWEEN.Easing.Linear.None)
-                                                .onComplete(() => {
-                                                    this.sayHiAnimation();
-                                                })
-                                                .start();
-                                        })
-                                        .start();
-                                })
-                                .start();
-                        })
-                        .start();
-                })
-            .start();
-        }
-    }
-
-    thumbsUpAnimation(){
-        if(!this.is_running_animation){
-            let tween = new TWEEN.Tween(this.bones.upperArmR.rotation)
-            .to({ x: (-120 * Math.PI) / 180, y: Math.PI / 4 }, 400)
-            .easing(TWEEN.Easing.Linear.None)
-            .onComplete(() => {
-                new TWEEN.Tween(this.bones.neck.rotation)
-                    .to({ z: (-30 * Math.PI) / 180 }, 200)
-                    .easing(TWEEN.Easing.Quadratic.Out)
-                    .onComplete(() => {
-
-                        //Fingers except thumb closed to make the hand a fist
-                        new TWEEN.Tween(this.bones.ring1R.rotation)
-                            .to({ z: 0 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.middle1R.rotation)
-                            .to({ z: (110 * Math.PI) / 180 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.indexR.rotation)
-                            .to({ z: 0 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        //Thumb's parts rotated to make the thumb up
-                        new TWEEN.Tween(this.bones.thumbR.rotation)
-                            .to({ y: -Math.PI / 2 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.thumb2R.rotation)
-                            .to({ x: -Math.PI, z: (-190 * Math.PI) / 180 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .onComplete(() => {
-                                let t = this.thumbsDownTween();
-                                t.delay(500);
-                                t.start();
-                            })
-                            .start();
-
-                    })
-                    .start();
-            });
-        return tween;
-        }
-    }
-
-    thumbsDownAnimation(){
-    if(!this.is_running_animation){
-            let tween = new TWEEN.Tween(this.bones.neck.rotation)
-            .to({ z: 0.05532293059308308 }, 200)
-            .easing(TWEEN.Easing.Linear.None)
-            .onComplete(() => {
-
-                new TWEEN.Tween(this.bones.upperArmR.rotation)
-                    .to({ x: -3.00467658726543, y: 1.2647589033354352 }, 400)
-                    .easing(TWEEN.Easing.Quadratic.Out)
-                    .onComplete(() => {
-
-                        new TWEEN.Tween(this.bones.ring1R.rotation)
-                            .to({ z: -0.9430903747676498 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.middle1R.rotation)
-                            .to({ z: 1.1048657896799357 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.indexR.rotation)
-                            .to({ z: -0.9294445756102357 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.thumbR.rotation)
-                            .to({ y: -0.9211440514236585 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .start();
-
-                        new TWEEN.Tween(this.bones.thumb2R.rotation)
-                            .to({ x: -1.717841085700298, z: -2.950171639213023 }, 150)
-                            .easing(TWEEN.Easing.Quadratic.Out)
-                            .onComplete(() => {
-                                this.thumbsUpAnimation();
-                            })
-                            .start();
-
-                    })
-                    .start();
-            });
-            return tween;
-        } 
     }
 
     danceAnimation(){
@@ -510,7 +325,7 @@ class Robot {
         }
     }
 
-    waveAnimation(){
+    hiAnimation(){
         if(!this.is_running_animation){
             new TWEEN.Tween(this.bones.shoulderR.rotation)
             .to({ z: 1.5635 }, 200)
@@ -604,7 +419,7 @@ class Robot {
                                                                 .easing(TWEEN.Easing.Quadratic.Out)
                                                                 .onComplete(
                                                                     () => {
-                                                                        this.waveFinishAnimation();
+                                                                        this.hiFinishAnimation();
                                                                     }
                                                                 )
                                                                 .start();
@@ -623,7 +438,7 @@ class Robot {
         }
     }
     
-    waveFinishAnimation(){
+    hiFinishAnimation(){
         if(!this.is_running_animation){
             new TWEEN.Tween(this.bones.shoulderR.rotation)
             .to({ x: -0.10898371808911646, y: -6.598976085917453e-7, z: 2.686421566968824, }, 200)
@@ -685,7 +500,7 @@ class Robot {
                 .to({ x: -1.717841085700298, y: -0.639071107342826, z: -2.950171639213023, }, 100)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onComplete(() => {
-                    this.waveAnimation()
+                    this.hiAnimation()
                 })
                 .start();
         }
@@ -737,9 +552,8 @@ class Robot {
                     .easing(TWEEN.Easing.Linear.None)
                     .start()
                     .onComplete(() => {
-                        //back to normal
                         this.is_running_animation = false;
-                        if(this.is_my_robot == false){
+                        if(this.is_my_robot == false){ //FORGOT THIS BECOUSE OF PHYSICS BUGS
                             let index = obstacleArray.findIndex(x => x.physicsBody.id === targetBody.id);
                             if(index != -1){
                                 const force = new CANNON.Vec3(0, 15, 2);         
