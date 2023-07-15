@@ -862,31 +862,54 @@ class Robot {
             rotationLowerLegL.z = this.bones.lowerLegL.rotation.z
             
             new TWEEN.Tween(this.bones.upperLegL.rotation)
-            .to({x: 2.18}, 500)
+            .to({x: 1.9}, 500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
 
             
             new TWEEN.Tween(this.bones.lowerLegL.rotation)
-            .to({x: 1.57}, 500)
+            .to({x: 1.7}, 500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
 
             
             new TWEEN.Tween(this.bones.upperLegR.rotation)
-            .to({x: 2.18}, 500)
+            .to({x: 1.9}, 500)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
             
             new TWEEN.Tween(this.bones.lowerLegR.rotation)
-            .to({x: 1.57}, 500)
+            .to({x: 1.7}, 500)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+
+            //Left arm Position
+            new TWEEN.Tween(this.bones.shoulderL.rotation)
+            .to({x: 2.1}, 300)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+
+            new TWEEN.Tween(this.bones.upperArmL.rotation)
+            .to({x: 2.9, y: -1.48, z: 2.62}, 300)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+            //end left arm position
+
+            //Right arm position
+            new TWEEN.Tween(this.bones.shoulderR.rotation)
+            .to({x: 2.1}, 300)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+
+            new TWEEN.Tween(this.bones.upperArmR.rotation)
+            .to({x: 2.9, y: 1.48, z: -2.62}, 300)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
 
             this.speed = 0
 
-            new TWEEN.Tween(this.bones.bone.position)
-            .to({y: this.bones.bone.position.y - 0.3}, 400)
+            new TWEEN.Tween(this.bones.body.position)
+            .to({y: this.bones.body.position.y - 0.3}, 400)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start()
             .onComplete(() => {
@@ -928,12 +951,26 @@ class Robot {
                 })
                 .start()
                 
-                new TWEEN.Tween(this.bones.bone.position)
-                .to({y: this.bones.bone.position.y - 0.3}, 400)
+                new TWEEN.Tween(this.bones.body.position)
+                .to({y: this.bones.body.position.y + 0.3}, 400)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .start()
 
-                
+                //shoulderL-> x rotation : -0.928
+                new TWEEN.Tween(this.bones.shoulderL.rotation)
+                .to({x: -0.928}, 300)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .start();
+
+                new TWEEN.Tween(this.bones.shoulderR.rotation)
+                .to({x: -0.928}, 300)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .start();
+
+                new TWEEN.Tween(this.bones.head.rotation)
+                .to({x: -0.858}, 300)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .start();
 
                 new TWEEN.Tween(this.mesh.position)
                 .to({x: this.mesh.position.x + 9}, duration)
@@ -952,14 +989,9 @@ class Robot {
                         this.is_running_animation = false;
                     },101)
                 });
-            
-                
 
             });
-
         }  
-
-
     }
 
  
