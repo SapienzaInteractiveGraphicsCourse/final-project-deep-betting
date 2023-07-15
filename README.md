@@ -1,7 +1,7 @@
 
 Emanuele Rucci , 2053183
 
-# DEEP BETTING. an Interactive Graphic Course at Sapienza, Rome
+# DEEP BETTING. an Interactive Graphic Course at Sapienza, Rome 2022/2023
 ![Project presentation](./assets/Screen/project_.png)
 
 ## How to see the project?
